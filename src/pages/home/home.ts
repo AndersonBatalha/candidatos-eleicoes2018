@@ -5,10 +5,14 @@ import { NavController } from 'ionic-angular';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController) { }
 
+  public abrirPagina(pagina: string) {
+    this.navCtrl.push(pagina);
   }
+
 
 }

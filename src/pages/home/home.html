@@ -1,14 +1,12 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>
+            Eleições 2018
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+    <button ion-button block large (click)="abrirPagina('CandidatosPresidentePage')">Presidente</button>
+    <button ion-button block large (click)="abrirPagina('ListaEstadosPage')">Governador</button>
 </ion-content>
