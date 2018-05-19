@@ -6,13 +6,17 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>candidatos-presidente</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>candidatos-presidente</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
-
+    <ion-list *ngFor='let candidato of candidatos'>
+        <ion-item>
+            {{candidato.nome}}
+            <candidato></candidato>
+        </ion-item>
+    </ion-list>
 </ion-content>

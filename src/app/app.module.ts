@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { CandidatosPresidentePageModule } from '../pages/candidatos-presidente/candidatos-presidente.module';
 import { ListaEstadosPageModule } from '../pages/lista-estados/lista-estados.module';
+import { EstadosBrasileirosProvider } from '../providers/estados-brasileiros/estados-brasileiros';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ListaEstadosPageModule } from '../pages/lista-estados/lista-estados.mod
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    EstadosBrasileirosProvider,
   ]
 })
 export class AppModule {}

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { EstadosBrasileirosProvider } from '../../providers/estados-brasileiros/estados-brasileiros';
 
-/**
+/*
  * Generated class for the ListaEstadosPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
@@ -15,7 +16,19 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ListaEstadosPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public estadosProvider: EstadosBrasileirosProvider,
+  ) {
+    this.estadosProvider.listarEstados().subscribe(
+      (sucesso) => {
+        console.log(sucesso);
+      },    
+      (e) => { 
+        console.error(e);
+      },
+    )
   }
 
   ionViewDidLoad() {

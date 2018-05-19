@@ -6,17 +6,19 @@ import { Component } from '@angular/core';
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
-@Component({
+
+ @Component({
   selector: 'candidato',
   templateUrl: 'candidato.html'
 })
+
 export class CandidatoComponent {
 
-  text: string;
+  //text: string;
 
   constructor() {
     console.log('Hello CandidatoComponent Component');
-    this.text = 'Hello World';
+    //this.text = 'Hello World';
   }
 
 }
