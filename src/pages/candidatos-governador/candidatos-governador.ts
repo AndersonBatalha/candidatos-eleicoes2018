@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the CandidatosPresidentePage page.
+ * Generated class for the CandidatosGovernadorPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,16 +10,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-candidatos-presidente',
-  templateUrl: 'candidatos-presidente.html',
+  selector: 'page-candidatos-governador',
+  templateUrl: 'candidatos-governador.html',
 })
-export class CandidatosPresidentePage {
+export class CandidatosGovernadorPage {
 
+  public Estado: string;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.Estado = this.navParams.get('estado')
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CandidatosPresidentePage');
+    console.log('ionViewDidLoad CandidatosGovernadorPage');
   }
 
 }

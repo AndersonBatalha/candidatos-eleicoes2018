@@ -6,13 +6,17 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>lista-estados</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>Selecione o estado</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+    <ion-list *ngFor='let estado of estados'>
+        <button ion-item block (click)='itemSelecionado(estado)'>
+          {{estado}}
+        </button>
+    </ion-list>
 </ion-content>
