@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { EstadosBrasileirosProvider } from '../../providers/estados-brasileiros/estados-brasileiros';
 
 /*
@@ -21,8 +21,15 @@ export class ListaEstadosPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public loadingCtrl: LoadingController,
     public estadosProvider: EstadosBrasileirosProvider,
   ) {
+    let loader = this.loadingCtrl.create({
+      content: "Carregando...",
+      duration: 3000
+    });
+    loader.present();
+    
     this.estadosProvider.listarEstados().subscribe(
       (sucesso) => {
         for (let i in sucesso) {
@@ -35,6 +42,7 @@ export class ListaEstadosPage {
       },
     )
     console.log(this.estados);
+    loader.dismiss()
   }
 
   ionViewDidLoad() {
@@ -44,5 +52,4 @@ export class ListaEstadosPage {
   public itemSelecionado(uf: String) {
     this.navCtrl.push('CandidatosGovernadorPage', {estado: uf})
   }
-
 }
