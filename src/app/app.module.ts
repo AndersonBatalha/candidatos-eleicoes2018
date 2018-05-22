@@ -13,6 +13,7 @@ import { EstadosBrasileirosProvider } from '../providers/estados-brasileiros/est
 import { HttpClientModule } from '@angular/common/http';
 import { CandidatosGovernadorPageModule } from '../pages/candidatos-governador/candidatos-governador.module';
 import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-aplicativo';
+import { DetalhesCandidatoPageModule } from '../pages/detalhes-candidato/detalhes-candidato.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-apl
     CandidatosPresidentePageModule,
     ListaEstadosPageModule,
     CandidatosGovernadorPageModule,
+    DetalhesCandidatoPageModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
   ],

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { DadosAplicativoProvider } from '../../providers/dados-aplicativo/dados-aplicativo';
+import { DetalhesCandidatoPage } from '../detalhes-candidato/detalhes-candidato';
 
 /**
  * Generated class for the CandidatosGovernadorPage page.
@@ -44,6 +45,13 @@ export class CandidatosGovernadorPage {
       }).catch(
       (error) => { console.log('erro ' + error.message) }
       )
+  }
+
+  /**
+ * detalhes
+ */
+  public detalhes(id: number, estado: string) {
+    this.navCtrl.push(DetalhesCandidatoPage, { pk: id, uf: estado })
   }
 
 }

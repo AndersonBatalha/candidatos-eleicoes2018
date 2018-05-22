@@ -1,0 +1,28 @@
+<!--
+  Generated template for the DetalhesCandidatoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Candidato</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div *ngIf='Estado === undefined'>
+        <h2>{{presidente.nome}}</h2>
+        <p>{{presidente.nomePartido}} ({{presidente.siglaPartido}})</p>
+        <p>{{presidente.historico}}</p>
+    </div>
+
+    <div #elseBlock>
+        <h2>{{governador.nome}}</h2>
+        <p>{{governador.nomePartido}} ({{governador.siglaPartido}})</p>
+        <p>{{governador.historico}}</p>
+    </div>
+</ion-content>

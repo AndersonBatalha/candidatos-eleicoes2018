@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { DadosAplicativoProvider } from '../../providers/dados-aplicativo/dados-aplicativo';
+import { DetalhesCandidatoPage } from '../detalhes-candidato/detalhes-candidato';
 
 /**
  * Generated class for the CandidatosPresidentePage page.
@@ -18,8 +19,12 @@ export class CandidatosPresidentePage {
 
   public candidatos: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dadosProvider: DadosAplicativoProvider, public loadingCtrl: LoadingController) {
-  }
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public dadosProvider: DadosAplicativoProvider, 
+    public loadingCtrl: LoadingController
+  ) {}
 
   ionViewDidEnter() {
     let loader = this.loadingCtrl.create({
@@ -42,6 +47,13 @@ export class CandidatosPresidentePage {
       }).catch(
         (error) => { console.log('erro ' + error.message) }
       )
+  }
+
+  /**
+   * detalhes
+   */
+  public detalhes(id: number) {
+    this.navCtrl.push(DetalhesCandidatoPage, {pk: id})  
   }
 
 }

@@ -15,7 +15,7 @@
 <ion-content padding>
     <ion-list>
         <ion-item *ngFor='let candidato of candidatos'>
-            <button ion-item>
+            <button ion-item (tap)='detalhes(candidato.id_candidato)'>
                 <h2>{{candidato.nome}}</h2>
                 <p>{{candidato.nome_partido}} ({{candidato.sigla_partido}})</p>
             </button>

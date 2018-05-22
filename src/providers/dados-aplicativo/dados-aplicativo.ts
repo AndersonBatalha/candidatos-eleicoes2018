@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from "@ionic-native/sqlite";
+import { Candidato, Governador } from '../../models/candidato';
 
 /*
   Generated class for the DadosAplicativoProvider provider.
@@ -245,7 +246,7 @@ export class DadosAplicativoProvider {
   }
   
   public CandidatosPresidente() {
-    let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
     return this.getDB().then((db: SQLiteObject) => {
       return db.executeSql(sql, [])
         .then((data: any) => {
@@ -271,7 +272,7 @@ export class DadosAplicativoProvider {
   }
 
   public CandidatosGovernador(estado: string) {
-    let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido, estado.UF, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF AND estado.nome_estado=?"
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido, partido.nome_partido, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF AND estado.nome_estado=?"
     return this.getDB().then((db: SQLiteObject) => {
       return db.executeSql(sql, [estado])
         .then((data: any) => {
@@ -297,4 +298,61 @@ export class DadosAplicativoProvider {
 
   }
 
+  public DetalhesCandidatoPresidente(id: number) {
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato=?"
+    return this.getDB().then((db: SQLiteObject) => {
+      return db.executeSql(sql, [id])
+        .then((data: any) => {
+          let row = data.rows.item(0);
+          if (row != undefined) {
+            let candidato = new Candidato()
+            candidato.id = row.id_candidato
+            candidato.nome = row.nome
+            candidato.historico = row.historico_candidato
+            candidato.siglaPartido = row.sigla_partido
+            candidato.nomePartido = row.nome_partido
+            return candidato
+          }
+          return null
+        })
+        .catch((erro) => {
+          console.error(erro.message)
+        })
+    })
+      .catch((erro) => {
+        console.error(erro.message)
+      })
+
+  }
+
+  public DetalhesCandidatoGovernador(id: number, estado: string) {
+    return this.getDB().then((db: SQLiteObject) => {
+      let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido, estado.UF, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND estado.UF = governador.UF AND candidato.id_candidato=? AND estado.nome_estado=?"
+      return db.executeSql(sql, [id, estado])
+        .then((data: any) => {
+          let row = data.rows.item(0);
+          if (row != undefined) {
+            let candidato = new Governador()
+            candidato.id = id
+            candidato.nome = row.nome
+            candidato.historico = row.historico_candidato
+            candidato.siglaPartido = row.sigla_partido
+            candidato.nomePartido = row.nome_partido
+            candidato.estado = estado
+            candidato.uf = row.UF
+            return candidato
+          }
+          return null
+        })
+        .catch((erro) => {
+          console.error(erro.message)
+        })
+    })
+      .catch((erro) => {
+        console.error(erro.message)
+      })
+
+  }
+
 }
+
