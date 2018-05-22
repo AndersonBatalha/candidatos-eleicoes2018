@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DadosAplicativoProvider } from '../../providers/dados-aplicativo/dados-aplicativo';
 
 /**
  * Generated class for the CandidatosPresidentePage page.
@@ -15,11 +16,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CandidatosPresidentePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public candidatos: Array<any> = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public dadosProvider: DadosAplicativoProvider) {
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter');
+    this.getAll();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CandidatosPresidentePage');
+  }
+
+  getAll() {
+    this.dadosProvider.getCandidatosPresidente()
+      .then((resultados: any[]) => {
+        this.candidatos = resultados
+      }).catch(
+        (erro) => {'erro ' + erro.message}
+      )
   }
 
 }

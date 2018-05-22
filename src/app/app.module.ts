@@ -13,6 +13,7 @@ import { EstadosBrasileirosProvider } from '../providers/estados-brasileiros/est
 import { HttpClientModule } from '@angular/common/http';
 import { CandidatosGovernadorPageModule } from '../pages/candidatos-governador/candidatos-governador.module';
 import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-aplicativo';
+import { DadosCandidatosProvider } from '../providers/dados-candidatos/dados-candidatos';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-apl
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     EstadosBrasileirosProvider,
     DadosAplicativoProvider,
+    DadosCandidatosProvider,
   ]
 })
 export class AppModule {}
