@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-aplicativo';
-import { SQLiteObject } from '@ionic-native/sqlite';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,9 +21,7 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      
       //dadosAplicativo.apagarBanco()
-
       dadosAplicativo.iniciarBanco().then(() => {
           splashScreen.hide();
         }).catch(() => {

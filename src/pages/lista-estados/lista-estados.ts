@@ -21,15 +21,13 @@ export class ListaEstadosPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public loadingCtrl: LoadingController,
     public estadosProvider: EstadosBrasileirosProvider,
+    public loadingCtrl: LoadingController
   ) {
     let loader = this.loadingCtrl.create({
-      content: "Carregando...",
-      duration: 3000
-    });
-    loader.present();
-    
+      content: 'Carregando...',
+    })
+    loader.present()
     this.estadosProvider.listarEstados().subscribe(
       (sucesso) => {
         for (let i in sucesso) {

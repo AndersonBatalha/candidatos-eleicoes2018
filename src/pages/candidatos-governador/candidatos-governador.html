@@ -7,15 +7,18 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>candidatos-governador</ion-title>
+        <ion-title>{{Estado}} - Governador</ion-title>
     </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
-    <p>
-        Item selecionado: {{Estado}}
-    </p>
-
+    <ion-list>
+        <ion-item *ngFor='let candidato of candidatos'>
+            <button ion-item>
+                <h2>{{candidato.nome}}</h2>
+                <p>{{candidato.nome_partido}} ({{candidato.sigla_partido}})</p>
+            </button>
+        </ion-item>
+    </ion-list>
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { DadosAplicativoProvider } from '../../providers/dados-aplicativo/dados-aplicativo';
 
 /**
@@ -18,12 +18,17 @@ export class CandidatosPresidentePage {
 
   public candidatos: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dadosProvider: DadosAplicativoProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public dadosProvider: DadosAplicativoProvider, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
-    console.log('ionViewDidEnter');
+    let loader = this.loadingCtrl.create({
+      content: 'Carregando...',
+    })
+    loader.present()
+    console.log('ionViewDidEnter CandidatosPresidentePage');
     this.getAll();
+    loader.dismiss()
   }
 
   ionViewDidLoad() {
@@ -31,11 +36,11 @@ export class CandidatosPresidentePage {
   }
 
   getAll() {
-    this.dadosProvider.getCandidatosPresidente()
+    this.dadosProvider.CandidatosPresidente()
       .then((resultados: any[]) => {
         this.candidatos = resultados
       }).catch(
-        (erro) => {'erro ' + erro.message}
+        (error) => { console.log('erro ' + error.message) }
       )
   }
 

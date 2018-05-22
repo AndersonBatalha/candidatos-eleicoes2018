@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from "@ionic-native/sqlite";
-//import { Candidato } from '../../models/candidato';
 
 /*
   Generated class for the DadosAplicativoProvider provider.
@@ -50,9 +49,9 @@ export class DadosAplicativoProvider {
   public iniciarBanco() {
     return this.getDB().then((db: SQLiteObject)=> {
       this.criarTabelas(db);
-      this.inserirDados(db)
+      this.inserirDados(db);
     })
-    .catch((e)=>{console.error(e)})
+    .catch((e)=>{ console.error(e.message) })
   }
   
   public inserirDados(db: SQLiteObject) {
@@ -172,7 +171,6 @@ export class DadosAplicativoProvider {
 
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (35, 'PSD', 'Índio da Costa', 'O deputado federal é o único nome cogitado pelo PSD, até o momento, para ser candidato a governador do Rio de Janeiro. Ex-secretário municipal de Urbanismo, Infraestrutura e Habitação da administração de Marcelo Crivella, Índio da Costa espera contar com o apoio do prefeito do Rio e de seu partido, o PRB, nas eleições estaduais. Crítico da intervenção militar na Segurança Pública do Rio – apesar de ter votado a favor da medida na Câmara dos Deputados -, o parlamentar já foi candidato a vice-presidente da República na chapa encabeçada por José Serra (PSDB) em 2010. Naquela oportunidade, Índio da Costa estava filiado ao DEM.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (36, 'PODE', 'Romário', 'O senador é o pré-candidato a governador do Rio do Podemos (ex-PTN). A pretensão do ex-jogador de disputar o pleito foi anunciada em setembro do ano passado e confirmada em março deste ano. Em 2014, Romário foi eleito ao Senado Federal com 4.683.963 votos, um número pouco menor dos votos somados (4.861.678) que Luiz Fernando Pezão e Marcelo Crivella receberam no primeiro turno da eleição para governador daquele ano. A eventual concretização da candidatura de Romário também deve abrir palanque no Rio para o senador Álvaro Dias, pré-candidato de seu partido para a Presidência da República.');",
-      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (37, 'PODE', 'Romário', 'O senador é o pré-candidato a governador do Rio do Podemos (ex-PTN). A pretensão do ex-jogador de disputar o pleito foi anunciada em setembro do ano passado e confirmada em março deste ano. Em 2014, Romário foi eleito ao Senado Federal com 4.683.963 votos, um número pouco menor dos votos somados (4.861.678) que Luiz Fernando Pezão e Marcelo Crivella receberam no primeiro turno da eleição para governador daquele ano. A eventual concretização da candidatura de Romário também deve abrir palanque no Rio para o senador Álvaro Dias, pré-candidato de seu partido para a Presidência da República.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (38, 'PSOL', 'Tarcisio Motta', 'O vereador do Rio de Janeiro deverá ser novamente o candidato do PSOL para o Governo do Estado. Em 2014, Tarcísio Motta surpreendeu durante a campanha e alcançou a quinta posição na eleição para o Palácio da Guanabara, com quase 9% dos votos no primeiro turno. Neste ano, um dos nomes cotados para compor a chapa de Motta como candidata ao cargo de vice-governadora era o da vereadora Marielle Franco, assassinada em uma emboscada no centro do Rio no mês de março.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (39, 'PT', 'Celso Amorim', 'O ex-chanceler Celso Amorim é o provável candidato petista para o Governo do Rio. A pré-candidatura do ministro das Relações Exteriores nos governos de Luiz Inácio Lula da Silva e Dilma Rousseff foi confirmada ao Estado pelo presidente do PT no Rio, Washington Quaquá. De acordo com ele, o partido ainda não fechou nenhum acordo, mas negocia o eventual apoio do PCdoB para as eleições 2018 no Estado.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (40, 'PCdoB', 'Leonardo Giordano', 'O PCdoB, no entanto, também já definiu seu pré-candidato para as eleições 2018. O vereador de Niterói Leonardo Giordano é a aposta da sigla para as eleições estaduais. De acordo com Giordano, o objetivo do PCdoB é construir uma “frente ampla” na disputa ao Governo. A ideia deverá ser discutida com líderes do PDT, PSB, PSOL, PCO e também com o PT. Apesar de se considerar uma alternativa viável para o pleito, Giordano admite que pode abrir mão da candidatura própria para apoiar outro nome, de outro partido, que encabece esta frente.');",
@@ -185,7 +183,6 @@ export class DadosAplicativoProvider {
 
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (18, 35, 'RJ')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (19, 36, 'RJ')",
-      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (20, 37, 'RJ')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (21, 38, 'RJ')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (22, 39, 'RJ')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (23, 40, 'RJ')",
@@ -247,10 +244,10 @@ export class DadosAplicativoProvider {
     })
   }
   
-  public getCandidatosPresidente() {
-    let sql_consulta_presidente: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
+  public CandidatosPresidente() {
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
     return this.getDB().then((db: SQLiteObject) => {
-      return db.executeSql(sql_consulta_presidente, {})
+      return db.executeSql(sql, [])
         .then((data: any) => {
           if (data.rows.length > 0) {
             let candidatos: Array<any> = []
@@ -265,7 +262,7 @@ export class DadosAplicativoProvider {
           }
         })
         .catch((erro) => {
-          console.error('erro')
+          console.error(erro.message)
         }) 
     })
     .catch((erro) => {
@@ -273,20 +270,21 @@ export class DadosAplicativoProvider {
     })
   }
 
-  public getCandidatosGovernador(uf: string) {
-    let sql_consulta_governador: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido, estado.UF, estado.nome_estado FROM candidato, governador, estado, partido WHERE estado.nome_estado = ? AND candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF"
-    let candidatos: Array<any> = []
-
+  public CandidatosGovernador(estado: string) {
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, candidato.historico_candidato, partido.sigla_partido, partido.nome_partido, estado.UF, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF AND estado.nome_estado=?"
     return this.getDB().then((db: SQLiteObject) => {
-      return db.executeSql(sql_consulta_governador, {uf})
+      return db.executeSql(sql, [estado])
         .then((data: any) => {
           if (data.rows.length > 0) {
-            for (var i; i < data.rows.length; i++) {
-              console.log(data.rows.item(i).nome);
-              var candidato = data.rows.item(i);
+            let candidatos: Array<any> = []
+            for (let i = 0; i < data.rows.length; i++) {
+              let candidato = data.rows.item(i);
               candidatos.push(candidato);
             }
             return candidatos
+          }
+          else {
+            return []
           }
         })
         .catch((erro) => {
@@ -296,5 +294,7 @@ export class DadosAplicativoProvider {
       .catch((erro) => {
         console.error(erro.message)
       })
+
   }
+
 }
