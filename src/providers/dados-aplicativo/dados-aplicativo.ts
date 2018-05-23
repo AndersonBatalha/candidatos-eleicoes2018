@@ -41,7 +41,7 @@ export class DadosAplicativoProvider {
       "CREATE TABLE IF NOT EXISTS governador(id_governador integer PRIMARY KEY NOT NULL, id_candidato integer NOT NULL, UF char(5) NOT NULL, CONSTRAINT fk_estado FOREIGN KEY(UF) REFERENCES estado(UF), CONSTRAINT fk_candidato FOREIGN KEY(id_candidato) REFERENCES candidato(id_candidato));",
     ]).then(() => {
         console.log('tabelas criadas')
-        //this.apagarBanco()
+        this.apagarBanco()
       })
       .catch((erro) => {
         console.error(erro.message)
@@ -50,8 +50,10 @@ export class DadosAplicativoProvider {
 
   public iniciarBanco() {
     return this.getDB().then((db: SQLiteObject)=> {
-      this.criarTabelas(db);
-      this.inserirDados(db);
+    if (!db.openDBs){
+        this.criarTabelas(db);
+        this.inserirDados(db);
+      }
     })
     .catch((e)=>{ console.error(e.message) })
   }
@@ -247,7 +249,7 @@ export class DadosAplicativoProvider {
   }
   
   public CandidatosPresidente() {
-    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido, partido.nome_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido FROM candidato, presidente, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = presidente.id_candidato"
     return this.getDB().then((db: SQLiteObject) => {
       return db.executeSql(sql, [])
         .then((data: any) => {
@@ -273,7 +275,7 @@ export class DadosAplicativoProvider {
   }
 
   public CandidatosGovernador(estado: string) {
-    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido, partido.nome_partido, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF AND estado.nome_estado=?"
+    let sql: string = "SELECT candidato.id_candidato, candidato.nome, partido.sigla_partido, estado.nome_estado FROM candidato, governador, estado, partido WHERE candidato.sigla_partido = partido.sigla_partido AND candidato.id_candidato = governador.id_candidato AND estado.UF = governador.UF AND estado.nome_estado=?"
     return this.getDB().then((db: SQLiteObject) => {
       return db.executeSql(sql, [estado])
         .then((data: any) => {
@@ -305,7 +307,6 @@ export class DadosAplicativoProvider {
       return db.executeSql(sql, [id])
         .then((data: any) => {
           let row = data.rows.item(0);
-          console.log('length '+row.length)
           if (row != undefined) {
             let candidato = new Candidato()
             candidato.id = row.id_candidato

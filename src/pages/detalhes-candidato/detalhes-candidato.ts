@@ -34,11 +34,12 @@ export class DetalhesCandidatoPage {
     this.Estado = this.navParams.get('uf')
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad DetalhesCandidatoPage');
     let loader = this.loadCtrl.create({
       content: 'Carregando...',
     })
-    console.log('ionViewDidEnter DetalhesCandidatoPage');
+    loader.present()
     if (this.Estado === undefined) {
       this.detalhesCandidatoPresidente()
     }
@@ -46,10 +47,6 @@ export class DetalhesCandidatoPage {
       this.detalhesCandidatoGovernador()
     }
     loader.dismiss()
-  }
-  
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DetalhesCandidatoPage');
   }
 
   public detalhesCandidatoPresidente() {

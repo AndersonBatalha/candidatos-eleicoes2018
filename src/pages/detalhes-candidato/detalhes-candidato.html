@@ -11,27 +11,40 @@
 
 </ion-header>
 
-
 <ion-content padding>
-    <ion-card *ngIf='Estado === undefined'>
-        <ion-item>
-            <h1>{{presidente.nome}}</h1>
-            <h3>{{presidente.nomePartido}} ({{presidente.siglaPartido}})</h3>
-        </ion-item>
+    <div *ngIf='Estado != undefined'>
+        <ion-card>
+            <ion-item>
+                <h1>{{governador.nome}}</h1>
+                <br>
+                <h3>{{governador.nomePartido}} ({{governador.siglaPartido}})</h3>
+            </ion-item>
 
-        <ion-card-content>
-            <p>{{presidente.historico}}</p>
-        </ion-card-content>
-    </ion-card>
+            <ion-card-content>
+                <br>
+                <p>
+                    <ion-icon name="information-circle"></ion-icon>
+                    {{governador.historico}}
+                </p>
+            </ion-card-content>
+        </ion-card>
+    </div>
 
-    <ion-card #elseBlock>
-        <ion-item>
-            <h1>{{governador.nome}}</h1>
-            <h3>{{governador.nomePartido}} ({{governador.siglaPartido}})</h3>
-        </ion-item>
+    <div *ngIf='!(Estado != undefined)'>
+        <ion-card>
+            <ion-item>
+                <h1>{{presidente.nome}}</h1>
+                <br>
+                <h3>{{presidente.nomePartido}} ({{presidente.siglaPartido}})</h3>
+            </ion-item>
 
-        <ion-card-content>
-            <p>{{governador.historico}}</p>
-        </ion-card-content>
-    </ion-card>
+            <ion-card-content>
+                <br>
+                <p>
+                    <ion-icon name="information-circle"></ion-icon>
+                    {{presidente.historico}}
+                </p>
+            </ion-card-content>
+        </ion-card>
+    </div>
 </ion-content>

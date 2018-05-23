@@ -16,9 +16,7 @@
     <ion-list>
         <ion-item *ngFor='let candidato of candidatos'>
             <button ion-item (tap)='detalhes(candidato.id_candidato, candidato.nome_estado)'>
-                <h2>{{candidato.nome}}</h2>
-                <p>{{candidato.nome_partido}} ({{candidato.sigla_partido}})</p>
-                <p>{{candidato.nome_estado}}</p>
+                <h2>{{candidato.nome}} ({{candidato.sigla_partido}})</h2>
             </button>
         </ion-item>
     </ion-list>

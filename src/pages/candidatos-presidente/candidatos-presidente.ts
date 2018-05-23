@@ -26,18 +26,14 @@ export class CandidatosPresidentePage {
     public loadingCtrl: LoadingController
   ) {}
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad CandidatosPresidentePage');
     let loader = this.loadingCtrl.create({
       content: 'Carregando...',
     })
     loader.present()
-    console.log('ionViewDidEnter CandidatosPresidentePage');
     this.getAll();
     loader.dismiss()
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CandidatosPresidentePage');
   }
 
   getAll() {

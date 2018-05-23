@@ -29,18 +29,14 @@ export class CandidatosGovernadorPage {
     this.Estado = this.navParams.get('estado')
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad CandidatosGovernadorPage');
     let loader = this.loadingCtrl.create({
       content: 'Carregando...',
     })
     loader.present()
-    console.log('ionViewDidEnter CandidatosGovernadorPage');
     this.getAll();
     loader.dismiss()
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CandidatosGovernadorPage');
   }
 
   getAll() {

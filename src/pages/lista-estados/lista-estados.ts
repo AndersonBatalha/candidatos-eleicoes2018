@@ -24,6 +24,10 @@ export class ListaEstadosPage {
     public estadosProvider: EstadosBrasileirosProvider,
     public loadingCtrl: LoadingController
   ) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ListaEstadosPage');
     let loader = this.loadingCtrl.create({
       content: 'Carregando...',
     })
@@ -41,10 +45,6 @@ export class ListaEstadosPage {
     )
     console.log(this.estados);
     loader.dismiss()
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ListaEstadosPage');
   }
 
   public itemSelecionado(uf: String) {
