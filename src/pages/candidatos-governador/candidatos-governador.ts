@@ -20,7 +20,12 @@ export class CandidatosGovernadorPage {
   public candidatos: any[];
   public Estado: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dadosProvider: DadosAplicativoProvider, public loadingCtrl: LoadingController) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public dadosProvider: DadosAplicativoProvider, 
+    public loadingCtrl: LoadingController
+  ) {
     this.Estado = this.navParams.get('estado')
   }
 
@@ -53,5 +58,5 @@ export class CandidatosGovernadorPage {
   public detalhes(id: number, estado: string) {
     this.navCtrl.push(DetalhesCandidatoPage, { pk: id, uf: estado })
   }
-
+  
 }

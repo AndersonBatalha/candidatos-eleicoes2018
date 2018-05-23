@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { DadosAplicativoProvider } from '../../providers/dados-aplicativo/dados-aplicativo';
 import { Candidato, Governador } from '../../models/candidato';
 
@@ -26,6 +26,7 @@ export class DetalhesCandidatoPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public loadCtrl: LoadingController,
     public dadosAplicativo: DadosAplicativoProvider,
   ) {
     this.dados = this.navParams.data
@@ -34,16 +35,17 @@ export class DetalhesCandidatoPage {
   }
 
   ionViewDidEnter() {
+    let loader = this.loadCtrl.create({
+      content: 'Carregando...',
+    })
     console.log('ionViewDidEnter DetalhesCandidatoPage');
     if (this.Estado === undefined) {
-      console.log('presidente')
       this.detalhesCandidatoPresidente()
-
     }
     else {
-      console.log('governador')
       this.detalhesCandidatoGovernador()
     }
+    loader.dismiss()
   }
   
   ionViewDidLoad() {
@@ -67,4 +69,5 @@ export class DetalhesCandidatoPage {
         (error) => { console.log('erro ' + error.message) }
       )
   }
+
 }
