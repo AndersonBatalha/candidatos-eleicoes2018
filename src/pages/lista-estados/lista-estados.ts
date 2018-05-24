@@ -26,8 +26,8 @@ export class ListaEstadosPage {
   ) {
   }
 
-  ionViewDidEnter() {
-    console.log('ionViewDidEnter ListaEstadosPage');
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter ListaEstadosPage');
     let loader = this.loadingCtrl.create({
       content: 'Carregando...',
     })
