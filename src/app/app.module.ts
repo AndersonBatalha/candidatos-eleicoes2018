@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CandidatosGovernadorPageModule } from '../pages/candidatos-governador/candidatos-governador.module';
 import { DadosAplicativoProvider } from '../providers/dados-aplicativo/dados-aplicativo';
 import { DetalhesCandidatoPageModule } from '../pages/detalhes-candidato/detalhes-candidato.module';
+import { SobrePageModule } from '../pages/sobre/sobre.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DetalhesCandidatoPageModule } from '../pages/detalhes-candidato/detalhe
     ListaEstadosPageModule,
     CandidatosGovernadorPageModule,
     DetalhesCandidatoPageModule,
+    SobrePageModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
   ],

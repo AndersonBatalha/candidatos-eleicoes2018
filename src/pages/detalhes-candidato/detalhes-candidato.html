@@ -17,13 +17,14 @@
             <ion-item>
                 <h1>{{governador.nome}}</h1>
                 <br>
-                <h3>{{governador.nomePartido}} ({{governador.siglaPartido}})</h3>
+                <h2>{{governador.estado}} ({{governador.uf}})</h2><br>
+                <h4>{{governador.nomePartido}} ({{governador.siglaPartido}})</h4>
             </ion-item>
 
             <ion-card-content>
                 <br>
                 <p>
-                    <ion-icon name="information-circle"></ion-icon>
+                    <ion-icon name="paper"></ion-icon>
                     {{governador.historico}}
                 </p>
             </ion-card-content>
@@ -41,7 +42,7 @@
             <ion-card-content>
                 <br>
                 <p>
-                    <ion-icon name="information-circle"></ion-icon>
+                    <ion-icon name="paper"></ion-icon>
                     {{presidente.historico}}
                 </p>
             </ion-card-content>

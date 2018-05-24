@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from "@ionic-native/sqlite";
 import { Candidato, Governador } from '../../models/candidato';
+import { EstadosBrasileirosProvider } from '../estados-brasileiros/estados-brasileiros';
 
 /*
   Generated class for the DadosAplicativoProvider provider.
@@ -14,6 +15,7 @@ export class DadosAplicativoProvider {
 
   constructor(
     public sqlite: SQLite, 
+    public estadosBrasileiros: EstadosBrasileirosProvider,
   ) {
     console.log('Hello DadosAplicativoProvider Provider');
   }
@@ -41,21 +43,20 @@ export class DadosAplicativoProvider {
       "CREATE TABLE IF NOT EXISTS governador(id_governador integer PRIMARY KEY NOT NULL, id_candidato integer NOT NULL, UF char(5) NOT NULL, CONSTRAINT fk_estado FOREIGN KEY(UF) REFERENCES estado(UF), CONSTRAINT fk_candidato FOREIGN KEY(id_candidato) REFERENCES candidato(id_candidato));",
     ]).then(() => {
         console.log('tabelas criadas')
-        this.apagarBanco()
       })
       .catch((erro) => {
         console.error(erro.message)
       })
   }
 
-  public iniciarBanco() {
+  public popularBanco() { // cria as tabelas e insere os dados
     return this.getDB().then((db: SQLiteObject)=> {
-    if (!db.openDBs){
-        this.criarTabelas(db);
-        this.inserirDados(db);
-      }
+      this.criarTabelas(db);
+      this.inserirDados(db);
     })
-    .catch((e)=>{ console.error(e.message) })
+    .catch((e) => { 
+      console.error(e.message) 
+    })
   }
   
   public inserirDados(db: SQLiteObject) {
@@ -66,21 +67,27 @@ export class DadosAplicativoProvider {
   }
 
   public inserirDadosEstado(db: SQLiteObject) {
-    let sql_estados: string = "INSERT INTO estado (UF, nome_estado) VALUES ('AC', 'Acre'), ('AL', 'Alagoas'), ('AM', 'Amazonas'), ('AP', 'Amapá'), ('BA', 'Bahia'), ('CE', 'Ceará'), ('DF', 'Distrito Federal'), ('ES', 'Espírito Santo'), ('GO', 'Goiás'), ('MA', 'Maranhão'), ('MG', 'Minas Gerais'), ('MS', 'Mato Grosso do Sul'), ('MT', 'Mato Grosso'), ('PA', 'Pará'), ('PB', 'Paraíba'), ('PE', 'Pernambuco'), ('PI', 'Piauí'), ('PR', 'Paraná'), ('RJ', 'Rio de Janeiro'), ('RN', 'Rio Grande do Norte'), ('RO', 'Rondônia'), ('RR', 'Roraima'), ('RS', 'Rio Grande do Sul'), ('SC', 'Santa Catarina'), ('SE', 'Sergipe'), ('SP', 'São Paulo'), ('TO', 'Tocantins');"
-    db.executeSql(sql_estados, {})
-      .then(() => {
-        console.log('tabelas estados - OK')
-      })
-      .catch((erro) => {
-        console.error(erro.message)
-      }) 
+    let sql: string = "INSERT INTO estado (UF, nome_estado) VALUES (?, ?);"
+    this.estadosBrasileiros.listarEstados().subscribe(
+      (dados) => {
+        for (let item in dados) {
+          db.executeSql(sql, [dados[item].sigla, dados[item].nome])
+            .then(() => {
+            })
+            .catch((error) => {
+              console.error(error.message)
+            })
+        }
+      }
+    )
+    console.log('estado - OK')
   }
 
   public inserirDadosPartidos(db: SQLiteObject) {
     let sql_partidos: string = "INSERT INTO partido (sigla_partido, nome_partido) VALUES ('MDB', 'Movimento Democrático Brasileiro'), ('PT', 'Partido dos Trabalhadores'), ('PSDB', 'Partido da Social Democracia Brasileira'), ('PP', 'Partido Progressista'), ('PDT', 'Partido Democrático Trabalhista'), ('PTB', 'Partido Trabalhista Brasileiro'), ('DEM', 'Democratas'), ('PR', 'Partido da República'), ('PSB', 'Partido Socialista Brasileiro'), ('PPS', 'Partido Popular Socialista'), ('PSC', 'Partido Social Cristão'), ('PCdoB', 'Partido Comunista do Brasil'), ('PRB', 'Partido Republicano Brasileiro'), ('PV', 'Partido Verde'), ('PSD', 'Partido Social Democrático'), ('PRP', 'Partido Republicano Progressista'), ('PSL', 'Partido Social Liberal'), ('PMN','Partido da Mobilização Nacional'), ('PHS','Partido Humanista da Solidariedade'), ('PTC','Partido Trabalhista Cristão'), ('SD','Solidariedade'), ('PSDC','Partido Social Democrata Cristão'), ('AVANTE','Avante'), ('PODE','Podemos'), ('PSOL','Partido Socialismo e Liberdade'), ('PRTB','Partido Renovador Trabalhista Brasileiro'), ('PROS','Partido Republicano da Ordem Social'), ('PATRI','Patriota'), ('PPL','Partido Pátria Livre'), ('PMB','Partido da Mulher Brasileira'), ('REDE','Rede Sustentabilidade'), ('PSTU','Partido Socialista dos Trabalhadores Unificado'), ('PCB','Partido Comunista Brasileiro'), ('NOVO','Partido Novo'), ('PCO','Partido da Causa Operária');"
     db.executeSql(sql_partidos, {})
       .then(() => {
-        console.log('tabelas partidos - OK')
+        console.log('partidos - OK')
       })
       .catch((erro) => {
         console.error(erro.message)
@@ -128,7 +135,7 @@ export class DadosAplicativoProvider {
       "INSERT INTO presidente(id_presidente, id_candidato) VALUES (18,18);",
     ]
     db.sqlBatch(sql_candidatos_presidente).then(() => {
-      console.log('tabelas candidatos presidente - OK')
+      console.log('candidatos presidente - OK')
     })
       .catch((erro) => {
         console.error(erro.message)
@@ -175,7 +182,7 @@ export class DadosAplicativoProvider {
 
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (35, 'PSD', 'Índio da Costa', 'O deputado federal é o único nome cogitado pelo PSD, até o momento, para ser candidato a governador do Rio de Janeiro. Ex-secretário municipal de Urbanismo, Infraestrutura e Habitação da administração de Marcelo Crivella, Índio da Costa espera contar com o apoio do prefeito do Rio e de seu partido, o PRB, nas eleições estaduais. Crítico da intervenção militar na Segurança Pública do Rio – apesar de ter votado a favor da medida na Câmara dos Deputados -, o parlamentar já foi candidato a vice-presidente da República na chapa encabeçada por José Serra (PSDB) em 2010. Naquela oportunidade, Índio da Costa estava filiado ao DEM.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (36, 'PODE', 'Romário', 'O senador é o pré-candidato a governador do Rio do Podemos (ex-PTN). A pretensão do ex-jogador de disputar o pleito foi anunciada em setembro do ano passado e confirmada em março deste ano. Em 2014, Romário foi eleito ao Senado Federal com 4.683.963 votos, um número pouco menor dos votos somados (4.861.678) que Luiz Fernando Pezão e Marcelo Crivella receberam no primeiro turno da eleição para governador daquele ano. A eventual concretização da candidatura de Romário também deve abrir palanque no Rio para o senador Álvaro Dias, pré-candidato de seu partido para a Presidência da República.');",
-      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (38, 'PSOL', 'Tarcisio Motta', 'O vereador do Rio de Janeiro deverá ser novamente o candidato do PSOL para o Governo do Estado. Em 2014, Tarcísio Motta surpreendeu durante a campanha e alcançou a quinta posição na eleição para o Palácio da Guanabara, com quase 9% dos votos no primeiro turno. Neste ano, um dos nomes cotados para compor a chapa de Motta como candidata ao cargo de vice-governadora era o da vereadora Marielle Franco, assassinada em uma emboscada no centro do Rio no mês de março.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (38, 'PSOL', 'Tarcísio Motta', 'O vereador do Rio de Janeiro deverá ser novamente o candidato do PSOL para o Governo do Estado. Em 2014, Tarcísio Motta surpreendeu durante a campanha e alcançou a quinta posição na eleição para o Palácio da Guanabara, com quase 9% dos votos no primeiro turno. Neste ano, um dos nomes cotados para compor a chapa de Motta como candidata ao cargo de vice-governadora era o da vereadora Marielle Franco, assassinada em uma emboscada no centro do Rio no mês de março.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (39, 'PT', 'Celso Amorim', 'O ex-chanceler Celso Amorim é o provável candidato petista para o Governo do Rio. A pré-candidatura do ministro das Relações Exteriores nos governos de Luiz Inácio Lula da Silva e Dilma Rousseff foi confirmada ao Estado pelo presidente do PT no Rio, Washington Quaquá. De acordo com ele, o partido ainda não fechou nenhum acordo, mas negocia o eventual apoio do PCdoB para as eleições 2018 no Estado.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (40, 'PCdoB', 'Leonardo Giordano', 'O PCdoB, no entanto, também já definiu seu pré-candidato para as eleições 2018. O vereador de Niterói Leonardo Giordano é a aposta da sigla para as eleições estaduais. De acordo com Giordano, o objetivo do PCdoB é construir uma “frente ampla” na disputa ao Governo. A ideia deverá ser discutida com líderes do PDT, PSB, PSOL, PCO e também com o PT. Apesar de se considerar uma alternativa viável para o pleito, Giordano admite que pode abrir mão da candidatura própria para apoiar outro nome, de outro partido, que encabece esta frente.');",
       "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (41, 'REDE', 'Miro Teixeira', 'Quem também está conversando com líderes de outros partidos é o deputado Miro Teixeira, provável candidato da Rede Sustentabilidade para o Governo do Rio. O parlamentar revelou ao Estado que mantém diálogo aberto com outros pré-candidatos e que já procurou conversar com membros das direções do PSDB, PPS, PSD e DEM. Atualmente no sétimo partido de sua carreira política, Miro já confirmou que não será candidato para a Câmara dos Deputados nesta eleição.');",
@@ -239,9 +246,38 @@ export class DadosAplicativoProvider {
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (45, 62, 'DF')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (46, 63, 'DF')",
       "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (47, 64, 'DF')",
+
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (66, 'PT', 'Décio Lima', 'O catarinense Décio Lima está em seu terceiro mandato como deputado federal. É líder dos partidos da Oposição no Congresso Nacional, e Presidente do PT de Santa Catarina. Foi duas vezes Prefeito de Blumenau, além de Vereador');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (67, 'PSD', 'Gelson Merisio', 'Gelson Merisio, empresário e político, é natural de Xaxim, tem 51 anos. Assumiu seu primeiro cargo eletivo em 1989, como vereador, iniciando na vida pública como vereador mais votado no município de Xanxerê, região oeste catarinense, na década de 80, atuando também como presidente da Câmara Municipal. Ocupou os cargos de secretário estadual de Desenvolvimento Econômico (1999), secretário de Agricultura e chefe da Casa Civil. Eleito quatro vezes deputado estadual (entre 2005 e atual legislatura) e presidente da Assembleia Legislativa de SC por três gestões (2010-2011/ 2012-2013 / 2015-2016).');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (68, 'MDB', 'Mauro Mariani', 'Empresário no ramo moveleiro e ex-Secretário de Infraestrutura de Santa Catarina. Foi Prefeito de Rio Negrinho/SC entre 1997-2000 e 2001-2002 e Deputado Estadual por Florianópolis entre 2003 e 2007.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (69, 'PSDB', 'Paulo Bauer', 'Paulo Bauer nasceu em Blumenau em 1957. Mudou-se para Joinville e estudou Ciências Contábeis e Administração de Empresas. Foi eleito senador em 2010, com quase 1,6 milhão de votos. Foi considerado o 4º melhor senador do Brasil em 2013.');",
+
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (49, 66, 'SC')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (50, 67, 'SC')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (51, 68, 'SC')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (52, 69, 'SC')",
+
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (70, 'PCdoB', 'Abgail Pereira', 'Com Manuela D’Ávila concorrendo à Presidência, Abgail Pereira é a pré-candidata do PC do B ao Piratini. Se nada mudar, será a primeira vez que a sigla terá candidatura própria aos dois cargos desde a redemocratização  — o partido vinha se aliando ao PT. Em 2014, quando Tarso Genro (PT) disputou a reeleição, Abgail concorreu a vice-governadora. Com três décadas de vida partidária, a ex-secretária do Turismo na gestão de Tarso é conhecida por lutar pelos direitos da mulher e dos trabalhadores e é crítica ferrenha do governo Sartori.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (71, 'PSDB', 'Eduardo Leite', 'O ex-prefeito de Pelotas é o nome do PSDB para concorrer ao Palácio Piratini. No início do ano, a sigla deixou o secretariado de Sartori — no qual ocupava cerca de 50 cargos desde o início da gestão — para se descolar do atual governo e reduzir o desgaste. Formado em Direito, defensor de parcerias com iniciativa privada e redução da máquina pública, tem se dividido entre o mestrado em Gestão e Políticas Públicas, em São Paulo, e as articulações para definir a coligação. Recebeu oficialmente apoio do PTB, que irá  indicar o até então pré-candidato do partido, delegado Ranolfo Vieira Júnior, à vaga de vice-governador na chapa.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (72, 'PDT', 'Jairo Jorge', 'O ex-prefeito de Canoas é a aposta do PDT — que foi aliado de Sartori até abril de 2017 — para voltar a disputar o governo do Estado, após duas décadas de jejum no Piratini (o único pedetista no posto foi Alceu Collares). Sem apoio no PT, Jairo migrou para o PDT no fim de 2016 e, desde fevereiro do ano passado, percorre o Rio Grande do Sul em busca de visibilidade. Já esteve em 400 cidades, participou de mais de 40 seminários batizados de RS Tem Solução e, até maio, pretende visitar todos os 497 municípios em sua pré-campanha.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (73, 'MDB', 'José Ivo Sartori', 'Não assume publicamente a intenção de concorrer a novo mandato, mas, nos bastidores, trabalha pessoalmente para viabilizar a candidatura — as conversas com potenciais apoiadores se aceleraram nos últimos dias. No início, o desejo de Sartori era ter Eduardo Leite (PSDB) como vice e Ana Amélia Lemos (PP) e Beto Albuquerque (PSB) concorrendo ao Senado. Agora, busca um plano B. A intenção é atrair siglas como PTB (que poderia indicar o candidato a vice-governador), Pros, PR, PPS e Solidariedade.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (74, 'PP', 'Luis Carlos Heinze', 'Deputado federal ligado ao agronegócio, Luis Carlos Heinze está fortalecido depois de obter a maioria dos votos na pré-convenção do partido, mas terá o desafio de superar divergências internas e costurar apoios para seguir em frente. Importante aliado do governo Sartori, o qual deixou em março, a sigla busca apoio do DEM e do Pros e mira em outras como PRB, PR, Rede, PSB e, principalmente, PTB — um de seus desejos é ter o ex-chefe de Polícia Ranolfo Vieira Jr. (PTB), também pré-candidato ao Piratini, como vice.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (75, 'NOVO', 'Mateus Bandeira', 'Diretor do Tesouro do Estado, secretário do Planejamento e presidente do Banrisul — todas funções exercidas na gestão de Yeda Crusius (PSDB) —, Mateus Bandeira é liberal convicto. O analista de sistemas especializado em finanças corporativas e políticas públicas nos EUA defende amplo programa de desburocratização e a revisão do papel do Estado, mas terá o desafio de fazer sua mensagem chegar ao eleitorado. Motivo: o Novo decidiu não fazer coligações, o que diminuirá o espaço na propaganda de rádio e na TV.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (76, 'PT', 'Miguel Rossetto', 'Com os ex-governadores Olívio Dutra e Tarso Genro decididos a não concorrer novamente, o PT apostou em Miguel Rossetto na tentativa de retomar o Palácio Piratini. Rossetto foi vice-governador de Olívio (1999-2002) e ministro nos governos de Luiz Inácio Lula da Silva e Dilma Rousseff. Agora, se apresenta como o principal nome de oposição ao governo Sartori, mas, desta vez, não deverá ter o apoio do PC do B. É crítico do acordo de adesão do Estado ao regime de recuperação fiscal e diz ser possível pagar em dia o funcionalismo.');",
+      "INSERT INTO candidato(id_candidato, sigla_partido, nome, historico_candidato) VALUES (77, 'PSOL', 'Roberto Robaina', 'O vereador de Porto Alegre Roberto Robaina deverá disputar pela terceira vez o governo do Estado — já concorreu  em 2006 e em 2014. Com o apoio da ex-deputada federal Luciana Genro, com quem foi casado e tem um filho, o professor de História e doutor em Filosofia pretende elaborar um programa de governo voltado aos movimentos sociais, com protagonismo das mulheres e das populações negra e LGBT. Defende auditoria e suspensão do pagamento da dívida do Estado e a revisão das isenções fiscais a grandes empresas.');",
+
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (53, 70, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (54, 71, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (55, 72, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (56, 73, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (57, 74, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (58, 75, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (59, 76, 'RS')",
+      "INSERT INTO governador(id_governador, id_candidato, UF) VALUES (60, 77, 'RS')",
+
     ]
     db.sqlBatch(sql_candidatos_governador).then(() => {
-      console.log('tabelas candidatos governador - OK')
+      console.log('candidatos governador - OK')
     })
       .catch((erro) => {
         console.error(erro.message)
@@ -341,7 +377,7 @@ export class DadosAplicativoProvider {
             candidato.historico = row.historico_candidato
             candidato.siglaPartido = row.sigla_partido
             candidato.nomePartido = row.nome_partido
-            candidato.estado = estado
+            candidato.estado = row.nome_estado
             candidato.uf = row.UF
             return candidato
           }

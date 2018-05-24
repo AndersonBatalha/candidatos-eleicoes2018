@@ -9,4 +9,7 @@
 <ion-content padding>
     <button ion-button block large (click)="abrirPagina('CandidatosPresidentePage')">Presidente</button>
     <button ion-button block large (click)="abrirPagina('ListaEstadosPage')">Governador</button>
+    <ion-fab bottom right (tap)="abrirPagina('SobrePage')">
+        <ion-icon class='info' name="ios-information-circle-outline"></ion-icon>
+    </ion-fab>
 </ion-content>
