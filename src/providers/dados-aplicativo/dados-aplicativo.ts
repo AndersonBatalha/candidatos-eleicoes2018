@@ -78,9 +78,9 @@ export class DadosAplicativoProvider {
               console.error(error.message)
             })
         }
+        console.log('estado - OK')
       }
     )
-    console.log('estado - OK')
   }
 
   public inserirDadosPartidos(db: SQLiteObject) {
